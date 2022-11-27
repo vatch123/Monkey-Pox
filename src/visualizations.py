@@ -3,9 +3,10 @@ Python module which contains all the data visualizations
 """
 import pandas as pd
 import plotly.express as px
+import matplotlib.pyplot as plt
 
 from src.utils import get_highest_cases
-
+from statistics import mean
 
 def total_cases_on_map(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame):
 
@@ -58,3 +59,57 @@ def daily_changes(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame
                  x="Date", y="Cases", color="Country",
                   title="Daily Changes")
     fig.show()
+
+def timeline(df_worldwide_cases: pd.DataFrame):
+    df = df_worldwide_cases.copy()
+    date = df['Date_confirmation'].tolist()
+    country = df['Country'].tolist()
+    world_counter = {}
+    us_counter = {}
+
+    for i in range(len(date)):
+        dat = date[i]
+        cou = country[i]
+        if dat not in world_counter.keys():
+            world_counter[dat] = 1
+        else:
+            world_counter[dat] += 1
+        if cou == 'United States':
+            if dat not in us_counter.keys():
+                us_counter[dat] = 1
+            else:
+                us_counter[dat] += 1
+            
+    world_date = list(world_counter.keys())
+    world_count = list(world_counter.values())
+    plt.plot(world_date, world_count, label="World")
+    us_date = list(us_counter.keys())
+    us_count = list(us_counter.values())
+    plt.plot(us_date, us_count, label="US")
+    plt.legend()
+    plt.xticks(world_date[25::25])
+    plt.title('Confirmed Cases in the World and the US')
+    plt.xlabel('Dates')
+    plt.ylabel('Number of Cases')
+    plt.show()
+    
+def histogram(df_cases_worldwide: pd.dataframe):
+    df = df_cases_worldwide.copy()
+    conf = mean(df['Confirmed_Cases'].tolist())
+    hosp = mean(df['Hospitalized'].tolist())
+    trav = mean(df['Travel_History_Yes'].tolist())
+
+    plt.bar(['US','World'], [24403, conf])
+    plt.title('Confirmed')
+    plt.ylabel('Number of Cases')
+    plt.show()
+    plt.clf()
+    plt.bar(['US','World'], [4, hosp])
+    plt.title('Hospitalized')
+    plt.ylabel('Number of Cases')
+    plt.show()
+    plt.clf()
+    plt.bar(['US','World'], [41, trav])
+    plt.title('Travel History')
+    plt.ylabel('Number of Cases')
+    plt.show()
