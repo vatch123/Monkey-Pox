@@ -1,6 +1,8 @@
 import os
+import re
 import pandas as pd
 import numpy as np
+import matplotlib
 from geopy.geocoders import Nominatim
 from pycountry_convert import country_alpha2_to_continent_code, country_name_to_country_alpha2
 
@@ -70,3 +72,37 @@ def get_highest_cases(df_worldwide_cases: pd.DataFrame, topK: int = 10):
     df_worldwide_cases = df_worldwide_cases.head(topK)
 
     return df_worldwide_cases["Country"]
+
+def parse_symptoms(df_detection_timeline: pd.DataFrame):
+    symptoms: pd.DataFrame = df_detection_timeline[["Symptoms"]]
+    symptoms["Symptoms"].replace(np.nan,"NA",inplace = True)
+    symptoms = symptoms[symptoms["Symptoms"].isin(["NA"]) == False]
+    symptoms["Symptoms"] = symptoms["Symptoms"].str.split(", | , | ,|;")
+    symptoms = symptoms.explode("Symptoms")
+
+    # Replace similar symptoms with a single
+    symptoms.replace(regex=re.compile(r".*rash.*", flags=re.IGNORECASE), value="Rash", inplace=True)
+    symptoms.replace(regex=re.compile(r".*headache.*", flags=re.IGNORECASE), value = "Headache", inplace=True)
+    symptoms.replace(regex=re.compile(r".*pain.*", flags=re.IGNORECASE), value = "Muscle Pain", inplace=True)
+    symptoms.replace(to_replace = ["Swelling","swelling of lymph nodes","enlarged lymph nodes","Slight swallowing difficulties and an elevated temperature"], value = "swollen lymph nodes", inplace=True)
+    symptoms.replace(to_replace = ["lesions","skin manifestations","isolated skin lesions","lower abdomen skin lesions","Spots on skin","Three lesions typical of monkeypox"], value = "skin lesions", inplace=True)
+    symptoms.replace(regex=re.compile(r".*fever.*", flags=re.IGNORECASE), value = "Fever", inplace=True)
+    symptoms.replace(regex=re.compile(r".*algia.*", flags=re.IGNORECASE), value = "Myalgia", inplace=True)
+    symptoms["Symptoms"] = symptoms["Symptoms"].str.title()
+
+    return symptoms.groupby('Symptoms').size().reset_index(name='Count').sort_values('Count', ascending=False)
+
+def save_fig(name):
+    def show_and_save_plots(func):
+        def plot(*args, **kwargs):
+            # Get the figure
+            fig = func(*args, **kwargs)
+            # Save and show the plots
+            plot_path = os.path.join(os.getcwd(), f'plots/{name}')
+            if isinstance(fig, matplotlib.figure.Figure):
+                fig.savefig(plot_path)
+            else:
+                fig.write_image(plot_path)
+            return fig
+        return plot
+    return show_and_save_plots
