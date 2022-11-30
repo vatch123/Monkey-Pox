@@ -144,14 +144,14 @@ def hospitalized_and_travelled(df_worldwide_cases: pd.DataFrame):
     return fig
 
 @save_fig(name="Symptoms-pie.png")
-def most_frequent_symptoms(df_detection_timeline: pd.DataFrame, topK=10):
+def symptoms_distribution(df_detection_timeline: pd.DataFrame, topK=10):
     symptoms: pd.DataFrame = parse_symptoms(df_detection_timeline)
     df = symptoms.head(topK)
     fig = px.bar_polar(df,
                     r='Count',
                     theta='Symptoms',
                     title='Distribution of Symptoms',
-                    template="plotly_dark",
+                    template="plotly_white",
                     color_discrete_sequence=px.colors.sequential.Plasma_r
                     )
     return fig
@@ -175,7 +175,7 @@ def correlation_heatmap(df_worldwide_cases: pd.DataFrame):
                     color_continuous_scale=px.colors.sequential.Blues_r)
     return fig
 
-def timeline(df_worldwide_cases: pd.DataFrame):
+def US_world_timeline(df_worldwide_cases: pd.DataFrame):
     df = df_worldwide_cases.copy()
     date = df['Date_confirmation'].tolist()
     country = df['Country'].tolist()
@@ -239,4 +239,4 @@ if __name__=="__main__":
     df_worldwide_cases = read_data('Monkey_Pox_Cases_Worldwide_Cleaned.csv')
     df_daily_cases = read_data('Daily_Country_Wise_Confirmed_Cases.csv')
     df_detection_timeline = read_data('Worldwide_Case_Detection_Timeline_Cleaned.csv')
-    correlation_heatmap(df_worldwide_cases)
+    symptoms_distribution(df_detection_timeline)
