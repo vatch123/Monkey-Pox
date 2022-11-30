@@ -3,3 +3,5 @@ numpy
 matplotlib
 plotly
 seaborn
+pycountry_convert
+geopy

@@ -14,6 +14,8 @@ def clean_data(file: str):
     file: str
         Name of the file to be cleaned
     """
+    assert isinstance(file, str)
+
     pd.set_option('display.max_columns', None)
 
     df = read_data(file)
@@ -32,9 +34,16 @@ def clean_data(file: str):
 
 def add_geospatial_attributes(file: str):
     """
-    Adds the latitude and longitude for each country to the dataset
+    Adds the latitude and longitude for each country to the dataset and saves the data to
+    a new file suffixed with `_Cleaned`
+
+    Parameters
+    ----------
+    file: str
+        The name of the file to read data from
     """
-    df = read_data('Monkey_Pox_Cases_Worldwide.csv')
+    assert isinstance(file, str)
+    df = read_data(file)
     df = add_lat_long(df)
     output_file = file.split('.')[0] + "_Cleaned.csv"
     write_data(df, output_file)

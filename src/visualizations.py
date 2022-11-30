@@ -10,73 +10,54 @@ from statistics import mean
 from src.utils import get_highest_cases, read_data, save_fig, parse_symptoms
 
 
-@save_fig(name="Total-cases-NA.png")
-def cases_NA_map(df_worldwide_cases: pd.DataFrame):
+def cases_on_map(df_worldwide_cases: pd.DataFrame, region: str):
+    """
+    Returns a choropleth plot of number of cases in a given region
 
-    fig = px.choropleth(df_worldwide_cases,
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    region: str
+        The region of the world - ["north america", "south america", "europe", "africa", "asia"]
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame) and isinstance(region, str)
+    assert region in ["north america", "south america", "europe", "africa", "asia"]
+
+    @save_fig(name=f"Total_cases_{region.replace( ' ', '_')}.png")
+    def get_plot(df_worldwide_cases: pd.DataFrame, region:str):
+        fig = px.choropleth(df_worldwide_cases,
                         locations='Country',
                         locationmode='country names',
                         color="Confirmed_Cases",
-                        scope="north america",
+                        scope=region,
                         color_continuous_scale=px.colors.sequential.Blues_r,
-                        title="Cases in North America",
+                        title=f"Cases in {region.title()}",
                         labels={"Confirmed_Cases":"Confirmed Cases"})
-    return fig
-
-@save_fig(name="Total-cases-SA.png")
-def cases_SA_map(df_worldwide_cases: pd.DataFrame):
-
-    fig = px.choropleth(df_worldwide_cases,
-                        locations='Country',
-                        locationmode='country names',
-                        color="Confirmed_Cases",
-                        scope="south america",
-                        color_continuous_scale=px.colors.sequential.Blues_r,
-                        title="Cases in South America",
-                        labels={"Confirmed_Cases":"Confirmed Cases"})
-    return fig
-
-@save_fig(name="Total-cases-EU.png")
-def cases_EU_map(df_worldwide_cases: pd.DataFrame):
-
-    fig = px.choropleth(df_worldwide_cases,
-                        locations='Country',
-                        locationmode='country names',
-                        color="Confirmed_Cases",
-                        scope="europe",
-                        color_continuous_scale=px.colors.sequential.Blues_r,
-                        title="Cases in Europe",
-                        labels={"Confirmed_Cases":"Confirmed Cases"})
-    return fig
-
-@save_fig(name="Total-cases-AF.png")
-def cases_AF_map(df_worldwide_cases: pd.DataFrame):
-
-    fig = px.choropleth(df_worldwide_cases,
-                        locations='Country',
-                        locationmode='country names',
-                        color="Confirmed_Cases",
-                        scope="africa",
-                        color_continuous_scale=px.colors.sequential.Blues_r,
-                        title="Cases in Africa",
-                        labels={"Confirmed_Cases":"Confirmed Cases"})
-    return fig
-
-@save_fig(name="Total-cases-AS.png")
-def cases_AS_map(df_worldwide_cases: pd.DataFrame):
-
-    fig = px.choropleth(df_worldwide_cases,
-                        locations='Country',
-                        locationmode='country names',
-                        color="Confirmed_Cases",
-                        scope="asia",
-                        color_continuous_scale=px.colors.sequential.Blues_r,
-                        title="Cases in Asia",
-                        labels={"Confirmed_Cases":"Confirmed Cases"})
-    return fig
+        return fig
+    
+    return get_plot(df_worldwide_cases, region)
 
 @save_fig(name='Case-Trends.png')
 def case_trends(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame):
+    """
+    Returns a line chart of total number of cases against the date for top 10 countries
+    with the highest number of cases
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    df_daily_cases: pd.DataFrame
+        The dataframe which contains daily country wise number of cases info
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame) and isinstance(df_daily_cases, pd.DataFrame)
     
     # Find the topK countries
     countries = get_highest_cases(df_worldwide_cases)
@@ -91,7 +72,22 @@ def case_trends(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame):
 
 @save_fig(name="Daily-Changes.png")
 def daily_changes(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame):
-    
+    """
+    Returns a bar chart of number of cases detected on a day against the date for top 5 countries
+    with the highest number of cases
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    df_daily_cases: pd.DataFrame
+        The dataframe which contains daily country wise number of cases info
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame) and isinstance(df_daily_cases, pd.DataFrame)
+
     # Find the topK countries
     countries = get_highest_cases(df_worldwide_cases, topK=5)
     df_daily_cases = df_daily_cases[df_daily_cases["Country"].isin(countries)]
@@ -107,6 +103,20 @@ def daily_changes(df_worldwide_cases: pd.DataFrame, df_daily_cases: pd.DataFrame
 
 @save_fig("Cases-in-top-cities.png")
 def cases_cities(df_detection_timeline: pd.DataFrame):
+    """
+    Returns a bar chart of number of cases detected in a city for top 5 cities
+    with the highest number of cases
+
+    Parameters
+    ----------
+    df_detection_timeline: pd.DataFrame
+        The DataFrame which contains the case detection timeline
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_detection_timeline, pd.DataFrame)
+
     df_cities = df_detection_timeline[['City']]
     df_cities = df_cities.dropna()
     df_cities = df_cities.value_counts(['City']).reset_index(name='Total Cases')
@@ -118,6 +128,20 @@ def cases_cities(df_detection_timeline: pd.DataFrame):
 
 @save_fig(name="Suspected-cases.png")
 def suspected_cases_bar(df_worldwide_cases: pd.DataFrame):
+    """
+    Returns a bar chart of number of suspected cases for top 10 countries with the
+    highest number of suspected cases
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame)
+
     df = df_worldwide_cases.sort_values(["Suspected_Cases"],ascending=False).head(10)
     fig = px.bar(df,
                  x='Country', 
@@ -130,6 +154,21 @@ def suspected_cases_bar(df_worldwide_cases: pd.DataFrame):
 
 @save_fig(name="Hospitalization-Travelled.png")
 def hospitalized_and_travelled(df_worldwide_cases: pd.DataFrame):
+    """
+    Returns a grouped bar chart of number of confirmed cases where people have been
+    hospitalized or who have a travel history for top 10 countries with the
+    highest number of cases
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame)
+
     # Find the data for countries with the highest cases
     countries = get_highest_cases(df_worldwide_cases)
     df_worldwide_cases = df_worldwide_cases[df_worldwide_cases["Country"].isin(countries)]
@@ -145,6 +184,22 @@ def hospitalized_and_travelled(df_worldwide_cases: pd.DataFrame):
 
 @save_fig(name="Symptoms-pie.png")
 def symptoms_distribution(df_detection_timeline: pd.DataFrame, topK=10):
+    """
+    Returns a polar bar chart of number of cases having a particular symptom for the topK
+    most common symptoms
+
+    Parameters
+    ----------
+    df_detection_timeline: pd.DataFrame
+        The DataFrame which contains the case detection timeline
+    topK: int
+        The number of symptoms to choose
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_detection_timeline, pd.DataFrame) and isinstance(topK, int)
+
     symptoms: pd.DataFrame = parse_symptoms(df_detection_timeline)
     df = symptoms.head(topK)
     fig = px.bar_polar(df,
@@ -157,7 +212,20 @@ def symptoms_distribution(df_detection_timeline: pd.DataFrame, topK=10):
     return fig
 
 @save_fig(name="Symptoms-WordCloud.png")
-def symptoms_word_cloud(df_detection_timeline: pd.DataFrame, topK=10):
+def symptoms_word_cloud(df_detection_timeline: pd.DataFrame):
+    """
+    Returns a word cloud of all the symptoms
+
+    Parameters
+    ----------
+    df_detection_timeline: pd.DataFrame
+        The DataFrame which contains the case detection timeline
+    Returns
+    -------
+        A matplotlib figure
+    """
+    assert isinstance(df_detection_timeline, pd.DataFrame)
+
     symptoms: pd.DataFrame = parse_symptoms(df_detection_timeline)
     word_cloud = WordCloud(background_color='white').generate(str(symptoms["Symptoms"].values))
     fig = plt.figure()
@@ -167,6 +235,19 @@ def symptoms_word_cloud(df_detection_timeline: pd.DataFrame, topK=10):
 
 @save_fig(name="Correlation-Heatmap.png")
 def correlation_heatmap(df_worldwide_cases: pd.DataFrame):
+    """
+    Returns a correlation heatmap between the various columns in the dataset
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases
+    Returns
+    -------
+        A plotly figure
+    """
+    assert isinstance(df_worldwide_cases, pd.DataFrame)
+
     df_worldwide_cases = df_worldwide_cases.drop(columns=['Country', 'Country-Continent', 'lat', 'lon'])
     correlation = df_worldwide_cases.corr()
     fig = px.imshow(correlation,

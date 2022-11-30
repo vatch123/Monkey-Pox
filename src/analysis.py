@@ -1,11 +1,7 @@
-"""
-Created on Thu Nov 27 23:59:59
-@author: Abhishek Suryavanshi
-"""
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 from src.utils import *
 
@@ -17,9 +13,6 @@ def basic_analysis(df_daily_country_wise_confirmed_cases, df_monkey_pox_cases_wo
     params:df_daily_country_wise_confirmed_cases,df_monkey_pox_cases_worldwide,df_worldwide_case_detection_timeline
     type:pandas.DataFrame,pandas.DataFrame,pandas.DataFrame
     returns None
-    """
-    """
-    This is a docstring explaining function definition
     """
     assert isinstance(df_daily_country_wise_confirmed_cases, pd.DataFrame) and isinstance(df_monkey_pox_cases_worldwide,
                                                                                           pd.DataFrame) and isinstance(
@@ -62,9 +55,6 @@ def clean_worldwide(df_worldwide_case_detection_timeline):
     type:pandas.DataFrame
     returns a clean worldwide dataset
     """
-    """
-    This is a docstring explaining function definition
-    """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = df_worldwide_case_detection_timeline.drop_duplicates()
     temp_Worldwide_Case_Detection_Timeline['Gender'] = temp_Worldwide_Case_Detection_Timeline['Gender'].str.strip()
@@ -80,9 +70,6 @@ def hospitalization_gender(df_worldwide_case_detection_timeline):
     params:df_worldwide_case_detection_timeline
     type:pandas.DataFrame
     returns None
-    """
-    """
-    This is a docstring explaining function definition
     """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
@@ -103,9 +90,6 @@ def virus_vs_age_group(df_worldwide_case_detection_timeline):
     params:df_worldwide_case_detection_timeline
     type:pandas.DataFrame
     returns None
-    """
-    """
-    This is a docstring explaining function definition
     """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
@@ -132,9 +116,6 @@ def hospitalization_vs_age(df_worldwide_case_detection_timeline):
     type:pandas.DataFrame
     returns None
     """
-    """
-    This is a docstring explaining function definition
-    """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
     temp_Worldwide_Case_Detection_Timeline['Age'] = temp_Worldwide_Case_Detection_Timeline['Age'].fillna('0')
@@ -154,9 +135,6 @@ def hospitalization_symptoms(df_worldwide_case_detection_timeline):
     type:pandas.DataFrame
     returns None
     """
-    """
-    This is a docstring explaining function definition
-    """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
     fig = sns.histplot(temp_Worldwide_Case_Detection_Timeline, x='Symptoms', hue='Hospitalised (Y/N/NA)')
@@ -165,4 +143,3 @@ def hospitalization_symptoms(df_worldwide_case_detection_timeline):
     fig.set_xticklabels(labels, size=4, rotation=90)
     fig.grid(False)
     plt.show()
-
