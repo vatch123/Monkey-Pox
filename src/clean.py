@@ -1,8 +1,3 @@
-"""
-Created on Thu Nov 17 20:35:29 2022
-
-@author: Shiyuan Wang and Vatsalya Chaubey
-"""
 import pandas as pd
 
 from src.utils import read_data, write_data, add_lat_long
