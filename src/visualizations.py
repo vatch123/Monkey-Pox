@@ -175,8 +175,9 @@ def correlation_heatmap(df_worldwide_cases: pd.DataFrame):
                     color_continuous_scale=px.colors.sequential.Blues_r)
     return fig
 
-def US_world_timeline(df_worldwide_cases: pd.DataFrame):
-    df = df_worldwide_cases.copy()
+@save_fig(name="Timeline.png")
+def US_world_timeline(df_detection_timeline: pd.DataFrame):
+    df = df_detection_timeline.copy()
     date = df['Date_confirmation'].tolist()
     country = df['Country'].tolist()
     world_counter = {}
@@ -195,48 +196,47 @@ def US_world_timeline(df_worldwide_cases: pd.DataFrame):
             else:
                 us_counter[dat] += 1
 
+    fig= plt.figure()
     world_date = list(world_counter.keys())
     world_count = list(world_counter.values())
     plt.plot(world_date, world_count, label="World")
     us_date = list(us_counter.keys())
     us_count = list(us_counter.values())
 
-    fig = plt.figure()
     plt.plot(us_date, us_count, label="US")
     plt.legend()
     plt.xticks(world_date[25::25])
     plt.title('Confirmed Cases in the World and the US')
     plt.xlabel('Dates')
     plt.ylabel('Number of Cases')
-    plt.show()
 
     return fig
 
-def US_world_histogram(df_cases_worldwide: pd.DataFrame):
-    df = df_cases_worldwide.copy()
+def US_world_histogram(df_worldwide_cases: pd.DataFrame):
+    df = df_worldwide_cases.copy()
     conf = mean(df['Confirmed_Cases'].tolist())
     hosp = mean(df['Hospitalized'].tolist())
     trav = mean(df['Travel_History_Yes'].tolist())
 
-    fig = plt.figure()
+    conf_fig = plt.figure()
     plt.bar(['US','World'], [24403, conf])
     plt.title('Confirmed')
     plt.ylabel('Number of Cases')
-    plt.show()
-    plt.clf()
+
+    hosp_fig = plt.figure()
     plt.bar(['US','World'], [4, hosp])
     plt.title('Hospitalized')
     plt.ylabel('Number of Cases')
-    plt.show()
-    plt.clf()
+
+    trav_fig = plt.figure()
     plt.bar(['US','World'], [41, trav])
     plt.title('Travel History')
     plt.ylabel('Number of Cases')
-    plt.show()
-    return fig
+
+    return (conf_fig, hosp_fig, trav_fig)
 
 if __name__=="__main__":
     df_worldwide_cases = read_data('Monkey_Pox_Cases_Worldwide_Cleaned.csv')
     df_daily_cases = read_data('Daily_Country_Wise_Confirmed_Cases.csv')
     df_detection_timeline = read_data('Worldwide_Case_Detection_Timeline_Cleaned.csv')
-    symptoms_distribution(df_detection_timeline)
+    US_world_timeline(df_detection_timeline)
