@@ -7,9 +7,10 @@
 - [Directory Structure](#directory-structure)
 - [Instructions to run project:](#instructions-to-run-project)
 - [Directory Files:](#directory-files)
-- [Data Folder Description:](#data-folder-description)
+- [Data Directory:](#data-directory)
+- [Plots Directory:](#plots-directory)
 - [Project Motivation:](#project-motivation)
-- [Presentation Slides:](#presentation-slides)
+- [Presentation Directory:](#presentation-directory)
 - [Youtube Presentation Link:](#youtube-presentation-link)
 
 
@@ -60,14 +61,17 @@ Run the jupyter notebook `EDA_analysis.ipynb` cell by cell to go through the EDA
 - clean.py: This cleans the data from the data sets by removing the unwanted nans and replacing them with NA. It also formats the data for the required columns for writing out to the clean data CVS file. 
 - eda.ipynb: Exploratory Data Analysis file is a Jupyter notebook reads in the clean data sets in terms of dataframes.
 
-## Data Folder Description:
+## Data Directory:
 This folder contains CSV data files that were used for the project, which includes both the raw data and clean data. 
+
+## Plots Directory:
+This folders contains all the plots generated for the project. 
 
 ## Project Motivation:
 In May of 2022 a rare case of Monkeypox was diagnosed in the UK. Soon after, many other cases were reported in other areas of the world. Our motivation was to fulfill the ECE 143 project requirement but also learn about the spread of Monkeypox and predict the future of Monkeypox.
 
 
-## Presentation Slides:
+## Presentation Directory:
 The presentations slides are in the presentation folder in pdf form. 
 
 ## Youtube Presentation Link: 
