@@ -23,8 +23,7 @@ src
 |
 |__ main.py
 |__ clean.py
-|__ eda.ipynb
-|__ analysis.py
+|__ EDA_analysis.ipynb
 ```
 
 ## Instructions to run project:
