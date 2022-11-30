@@ -2,11 +2,12 @@
 Created on Thu Nov 27 23:59:59
 @author: Abhishek Suryavanshi
 """
-from src.utils import *
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
+
+from src.utils import *
 
 
 def basic_analysis(df_daily_country_wise_confirmed_cases, df_monkey_pox_cases_worldwide,
@@ -20,7 +21,9 @@ def basic_analysis(df_daily_country_wise_confirmed_cases, df_monkey_pox_cases_wo
     """
     This is a docstring explaining function definition
     """
-    assert isinstance(df_daily_country_wise_confirmed_cases,pd.DataFrame) and isinstance(df_monkey_pox_cases_worldwide,pd.DataFrame) and isinstance(df_worldwide_case_detection_timeline,pd.DataFrame)
+    assert isinstance(df_daily_country_wise_confirmed_cases, pd.DataFrame) and isinstance(df_monkey_pox_cases_worldwide,
+                                                                                          pd.DataFrame) and isinstance(
+        df_worldwide_case_detection_timeline, pd.DataFrame)
     """Analyzing Shape of datasets in the input"""
     print("World Case Detection Timeline Dataset shape", df_worldwide_case_detection_timeline.shape)
     print("Monkey Pox Cases Worldwide Dataset shape", df_monkey_pox_cases_worldwide.shape)
@@ -134,6 +137,11 @@ def hospitalization_vs_age(df_worldwide_case_detection_timeline):
     """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
+    temp_Worldwide_Case_Detection_Timeline['Age'] = temp_Worldwide_Case_Detection_Timeline['Age'].fillna('0')
+    temp_Worldwide_Case_Detection_Timeline['Age'] = temp_Worldwide_Case_Detection_Timeline['Age'].apply(
+        lambda x: np.array(x.split('-'), dtype=int).mean())
+    temp_Worldwide_Case_Detection_Timeline['Age'] = np.ceil(temp_Worldwide_Case_Detection_Timeline['Age']).astype(int)
+    temp_Worldwide_Case_Detection_Timeline.Age.value_counts().sort_values(ascending=False)
     figure = sns.catplot(temp_Worldwide_Case_Detection_Timeline, x='Age', y='Hospitalised (Y/N/NA)')
     plt.title('Hospitalization according to different ages')
     plt.show()
@@ -157,3 +165,4 @@ def hospitalization_symptoms(df_worldwide_case_detection_timeline):
     fig.set_xticklabels(labels, size=4, rotation=90)
     fig.grid(False)
     plt.show()
+
