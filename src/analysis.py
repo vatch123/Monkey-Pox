@@ -141,6 +141,9 @@ def hospitalization_symptoms(df_worldwide_case_detection_timeline):
     """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
+    temp_Worldwide_Case_Detection_Timeline = temp_Worldwide_Case_Detection_Timeline.sort_values('Symptoms',
+                                                                                                ascending=False).head(
+        50)
     f = plt.figure()
     fig = sns.histplot(temp_Worldwide_Case_Detection_Timeline, x='Symptoms', hue='Hospitalised (Y/N/NA)')
     fig.set_title('Hospitalization according to Symptoms')
