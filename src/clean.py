@@ -16,8 +16,6 @@ def clean_data(file: str):
     """
     assert isinstance(file, str)
 
-    pd.set_option('display.max_columns', None)
-
     df = read_data(file)
 
     # All the columns are string so we can replace nans with NA
@@ -26,6 +24,9 @@ def clean_data(file: str):
     # Replace all values starting with 'm/M' as male and 'f/F' as female
     df['Gender'] = df['Gender'].apply(lambda x: 'M' if (x.startswith('m') or x.startswith('M')) else x)
     df['Gender'] = df['Gender'].apply(lambda x: 'F' if (x.startswith('f') or x.startswith('F')) else x)
+
+    # Replace the spelling mistake in San Francisco's name
+    df.replace(to_replace='San Francsico', value='San Francisco', inplace=True)
 
     # All the other columns either contain a valid string or NAs
 

@@ -248,7 +248,7 @@ def correlation_heatmap(df_worldwide_cases: pd.DataFrame):
     """
     assert isinstance(df_worldwide_cases, pd.DataFrame)
 
-    df_worldwide_cases = df_worldwide_cases.drop(columns=['Country', 'Country-Continent', 'lat', 'lon'])
+    df_worldwide_cases = df_worldwide_cases.drop(columns=['Country', 'Country-Continent', 'lat', 'lon', 'Suspected_Cases'])
     correlation = df_worldwide_cases.corr()
     fig = px.imshow(correlation,
                     text_auto=True,
