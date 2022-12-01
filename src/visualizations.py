@@ -258,6 +258,17 @@ def correlation_heatmap(df_worldwide_cases: pd.DataFrame):
 
 @save_fig(name="Timeline.png")
 def US_world_timeline(df_detection_timeline: pd.DataFrame):
+    """
+    Returns a line chart of number of confirmed cases in US and the world.
+    
+    Parameters
+    ----------
+    df_detection_timeline: pd.DataFrame
+        The DataFrame which contains the case detection timeline.
+    Returns
+    -------
+        A matplotlib figure.
+    """
     df = df_detection_timeline.copy()
     date = df['Date_confirmation'].tolist()
     country = df['Country'].tolist()
@@ -294,6 +305,18 @@ def US_world_timeline(df_detection_timeline: pd.DataFrame):
     return fig
 
 def US_world_histogram(df_worldwide_cases: pd.DataFrame):
+    """
+    Returns a set of histograms compare the number of confirmed cases, 
+    hospitalized cases, and travel history between US and the world.
+
+    Parameters
+    ----------
+    df_worldwide_cases: pd.DataFrame
+        The DataFrame which contains country-wise data of cases.
+    Returns
+    -------
+        Three matplotlib figures.
+    """
     df = df_worldwide_cases.copy()
     conf = mean(df['Confirmed_Cases'].tolist())
     hosp = mean(df['Hospitalized'].tolist())
