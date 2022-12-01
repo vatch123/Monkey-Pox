@@ -74,7 +74,7 @@ def hospitalization_gender(df_worldwide_case_detection_timeline):
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
     sns.set_style('whitegrid')
-    _, axes = plt.subplots(figsize=(12, 8))
+    fig, _ = plt.subplots(figsize=(12, 8))
     ax = sns.countplot(x='Gender', hue='Hospitalised (Y/N/NA)', data=temp_Worldwide_Case_Detection_Timeline,
                        palette='YlGn')
     ax.tick_params(axis='x', rotation=90)
@@ -82,6 +82,7 @@ def hospitalization_gender(df_worldwide_case_detection_timeline):
         ax.bar_label(container)
     plt.title('Hospitalized Patients based on Gender')
     plt.show()
+    return fig
 
 
 def virus_vs_age_group(df_worldwide_case_detection_timeline):
@@ -101,12 +102,14 @@ def virus_vs_age_group(df_worldwide_case_detection_timeline):
     temp_Worldwide_Case_Detection_Timeline.Age.value_counts().sort_values(ascending=False)
     ages_selected = temp_Worldwide_Case_Detection_Timeline[temp_Worldwide_Case_Detection_Timeline['Age'] > 0]
 
+    fig = plt.figure()
     figure = sns.histplot(ages_selected, x='Age', bins=25)
     patch_h = [patch.get_height() for patch in figure.patches]
     idx_tallest = np.argmax(patch_h)
     figure.patches[idx_tallest].set_facecolor('#a834a8')
     figure.set_title('Virus detected as per different age groups')
     plt.show()
+    return fig
 
 
 def hospitalization_vs_age(df_worldwide_case_detection_timeline):
@@ -126,6 +129,7 @@ def hospitalization_vs_age(df_worldwide_case_detection_timeline):
     figure = sns.catplot(temp_Worldwide_Case_Detection_Timeline, x='Age', y='Hospitalised (Y/N/NA)')
     plt.title('Hospitalization according to different ages')
     plt.show()
+    return figure
 
 
 def hospitalization_symptoms(df_worldwide_case_detection_timeline):
@@ -137,9 +141,11 @@ def hospitalization_symptoms(df_worldwide_case_detection_timeline):
     """
     assert isinstance(df_worldwide_case_detection_timeline, pd.DataFrame)
     temp_Worldwide_Case_Detection_Timeline = clean_worldwide(df_worldwide_case_detection_timeline)
+    f = plt.figure()
     fig = sns.histplot(temp_Worldwide_Case_Detection_Timeline, x='Symptoms', hue='Hospitalised (Y/N/NA)')
     fig.set_title('Hospitalization according to Symptoms')
     _, labels = plt.xticks()
     fig.set_xticklabels(labels, size=4, rotation=90)
     fig.grid(False)
     plt.show()
+    return f
