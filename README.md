@@ -83,4 +83,4 @@ In May of 2022 a rare case of Monkeypox was diagnosed in the UK. Soon after, man
 The presentations slides are in the presentation folder in pdf form. 
 
 ## Youtube Presentation Link: 
-I will post link to presentation video after I record.
+The link to the presentation video - https://youtu.be/cmSSiGZaN6I
